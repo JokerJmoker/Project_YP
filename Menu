@@ -1,0 +1,57 @@
+from pygame import *
+init()
+size = (800, 600)
+PIXY = font.SysFont('PIXY', 50)
+screen = display.set_mode(size)
+
+background = image.load('...')
+
+class Menu:
+    def __init__(self):
+        self.option_surfaces = []
+        self.callbacks = []
+        self.current_option_index = 0
+
+    def append_option(self, option, callback):
+        self.option_surfaces.append(PIXY.render(option, True, (255, 255, 255)))
+        self.callbacks.append(callback)
+
+    def switch(self, direction):
+        self.current_option_index += direction
+        if self.current_option_index < 0:
+            self.current_option_index = len(self.option_surfaces) - 1
+        elif self.current_option_index >= len(self.option_surfaces):
+            self.current_option_index = 0
+
+    def select(self):
+        self.callbacks[self.current_option_index]()
+
+def draw_menu():
+    screen.blit(background, (0, 0))  # Отображение фона космоса
+    main_menu.draw(screen, 300, 200, 50)  # Отображение основного меню
+    display.update()
+
+# Создание объекта меню
+main_menu = Menu()
+
+# Добавление опций в меню
+main_menu.append_option("Start Game", start_game)
+main_menu.append_option("Difficulty", set_difficulty)
+main_menu.append_option("Choose Ship", choose_ship)
+main_menu.append_option("Quit", quit_game)
+
+# Основной игровой цикл
+running = True
+while running:
+    for e in event.get():
+        if e.type == QUIT:
+            running = False
+        elif e.type == KEYDOWN:
+            if e.key == K_w:
+                main_menu.switch(-1)  # Переключение вверх по меню
+            elif e.key == K_s:
+                main_menu.switch(1)  # Переключение вниз по меню
+            elif e.key == K_SPACE:
+                main_menu.select()  # Выбор текущей опции меню
+
+    draw_menu()
