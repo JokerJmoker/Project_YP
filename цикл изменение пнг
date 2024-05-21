@@ -1,0 +1,29 @@
+# Укажите путь к директории с изображениями
+directory = '/путь_к_директории'
+
+# Получаем список файлов в директории
+files = [file for file in os.listdir(directory) if file.endswith('.png')]
+
+# Если в директории есть хотя бы два PNG-файла
+if len(files) >= 2:
+    for i in range(len(files) - 1):
+        original_image_path = os.path.join(directory, files[i])
+        new_image_path = os.path.join(directory, files[i+1])
+
+        # Открываем исходную картинку
+        original_image = Image.open(original_image_path)
+        
+        # Открываем новую картинку
+        new_image = Image.open(new_image_path)
+        
+        # Вставляем содержимое новой картинки в исходную картинку
+        original_image.paste(new_image)
+        
+        # Сохраняем измененную картинку
+        modified_image_path = original_image_path.replace('.png', '_modified.png')
+        original_image.save(modified_image_path)
+
+      ...
+
+else:
+   ...
